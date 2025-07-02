@@ -1,4 +1,4 @@
-package amin.codelabs.qdo.feature.tasklist
+package amin.codelabs.qdo.feature.tasklist.contract
 
 import amin.codelabs.qdo.domain.task.Task
 import amin.codelabs.qdo.infrastructure.mvi.UiState

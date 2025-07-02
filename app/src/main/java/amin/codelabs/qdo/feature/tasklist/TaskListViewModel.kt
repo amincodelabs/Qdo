@@ -2,7 +2,10 @@ package amin.codelabs.qdo.feature.tasklist
 
 import amin.codelabs.qdo.domain.task.DeleteTaskUseCase
 import amin.codelabs.qdo.domain.task.GetTasksUseCase
-import amin.codelabs.qdo.feature.tasklist.TaskListIntent.*
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.*
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListEffect
 import amin.codelabs.qdo.infrastructure.logger.Logger
 import amin.codelabs.qdo.infrastructure.mvi.BaseMviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
