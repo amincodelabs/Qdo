@@ -8,10 +8,12 @@ import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListEffect
 import amin.codelabs.qdo.infrastructure.logger.Logger
 import amin.codelabs.qdo.infrastructure.mvi.BaseMviViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the Task List feature, using MVI architecture.
@@ -23,24 +25,26 @@ class TaskListViewModel @Inject constructor(
     private val deleteTask: DeleteTaskUseCase,
     private val logger: Logger
 ) : BaseMviViewModel<TaskListIntent, TaskListState, TaskListEffect>(TaskListState()) {
-    override suspend fun handleIntent(intent: TaskListIntent) {
-        when (intent) {
-            is LoadTasks -> loadTasks()
-            is DeleteTask -> deleteTask(intent.taskId)
-            is SelectTask -> sendEffect { TaskListEffect.NavigateToTask(intent.taskId) }
+
+    init {
+        viewModelScope.launch {
+            setState { copy(isLoading = true, error = null) }
+            getTasks()
+                .catch {
+                    logger.logError(it, "Failed to load tasks")
+                    setState { copy(isLoading = false, error = it.message) }
+                }
+                .collectLatest { tasks ->
+                    setState { copy(isLoading = false, tasks = tasks, error = null) }
+                }
         }
     }
 
-    private suspend fun loadTasks() {
-        setState { copy(isLoading = true, error = null) }
-        getTasks()
-            .catch {
-                logger.logError(it, "Failed to load tasks")
-                setState { copy(isLoading = false, error = it.message) }
-            }
-            .collectLatest { tasks ->
-                setState { copy(isLoading = false, tasks = tasks, error = null) }
-            }
+    override suspend fun handleIntent(intent: TaskListIntent) {
+        when (intent) {
+            is DeleteTask -> deleteTask(intent.taskId)
+            is SelectTask -> sendEffect { TaskListEffect.NavigateToTask(intent.taskId) }
+        }
     }
 
     private suspend fun deleteTask(taskId: Long) {
