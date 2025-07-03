@@ -20,4 +20,7 @@ interface TaskDao {
 
     @Update
     suspend fun updateTask(task: TaskEntity)
+
+    @Query("SELECT * FROM tasks WHERE id = :taskId LIMIT 1")
+    fun getTaskById(taskId: Long): Flow<TaskEntity?>
 } 

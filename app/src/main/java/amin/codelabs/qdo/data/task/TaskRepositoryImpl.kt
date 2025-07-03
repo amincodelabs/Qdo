@@ -27,4 +27,7 @@ class TaskRepositoryImpl @Inject constructor(
     override suspend fun updateTask(task: Task) {
         dao.updateTask(TaskEntityMapper.toEntity(task))
     }
+
+    override fun getTaskById(taskId: Long): Flow<Task?> =
+        dao.getTaskById(taskId).map { it?.let(TaskEntityMapper::fromEntity) }
 } 

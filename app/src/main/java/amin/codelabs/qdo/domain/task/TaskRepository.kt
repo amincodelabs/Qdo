@@ -30,4 +30,11 @@ interface TaskRepository {
      * @param task The task to update.
      */
     suspend fun updateTask(task: Task)
+
+    /**
+     * Get a single task by its ID.
+     * @param taskId The ID of the task to retrieve.
+     * @return A Flow emitting the task, or null if not found.
+     */
+    fun getTaskById(taskId: Long): Flow<Task?>
 } 
