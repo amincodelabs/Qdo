@@ -26,7 +26,7 @@ fun NavGraphBuilder.taskListNavGraph(navController: NavHostController) {
                 when (e) {
                     is TaskListEffect.ShowSnackbar -> snackbarHostState.showSnackbar(e.message)
                     is TaskListEffect.NavigateToTask -> {
-                        // navController.navigate(QdoDestination.TaskDetail.createRoute(e.taskId))
+                        navController.navigate(QdoDestination.TaskDetail.createRoute(e.taskId))
                     }
                 }
             }
@@ -36,7 +36,10 @@ fun NavGraphBuilder.taskListNavGraph(navController: NavHostController) {
             state = state,
             onIntent = viewModel::processIntent,
             onAddTask = { navController.navigate(QdoDestination.AddTask.route) },
-            snackbarHostState = snackbarHostState
+            snackbarHostState = snackbarHostState,
+            onSelect = {
+                 navController.navigate(QdoDestination.TaskDetail.createRoute(it))
+            }
         )
     }
 } 

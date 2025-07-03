@@ -20,7 +20,8 @@ fun TaskListScreen(
     state: TaskListState,
     onIntent: (TaskListIntent) -> Unit,
     onAddTask: () -> Unit = {},
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onSelect: (Long) -> Unit,
 ) {
 
     Scaffold(
@@ -32,7 +33,7 @@ fun TaskListScreen(
         TaskListContent(
             state = state,
             onIntent = onIntent,
-            modifier = androidx.compose.ui.Modifier.padding(padding)
+            modifier = androidx.compose.ui.Modifier.padding(padding),
         )
     }
 }
@@ -43,6 +44,7 @@ private fun TaskListScreenEmptyPreview() {
     TaskListScreen(
         state = TaskListState(tasks = emptyList()),
         onIntent = {},
+        onSelect = {}
     )
 }
 
@@ -63,6 +65,7 @@ private fun TaskListScreenFilledPreview() {
             )
         ),
         onIntent = {},
+        onSelect = {}
     )
 }
 
@@ -72,5 +75,6 @@ private fun TaskListScreenErrorPreview() {
     TaskListScreen(
         state = TaskListState(error = "Something went wrong!"),
         onIntent = {},
+        onSelect = {}
     )
 } 

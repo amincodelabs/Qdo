@@ -1,5 +1,8 @@
 package amin.codelabs.qdo.feature.tasklist.ui
 
+import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -7,32 +10,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import amin.codelabs.qdo.domain.task.Task
-import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
-import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 
 @Composable
 fun TaskListContent(
     state: TaskListState,
     onIntent: (TaskListIntent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         when {
             state.isLoading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
+
             state.error != null -> {
                 ErrorView(message = state.error)
             }
+
             state.tasks.isEmpty() -> {
                 EmptyView()
             }
+
             else -> {
                 TaskList(
                     tasks = state.tasks,
                     onDelete = { onIntent(TaskListIntent.DeleteTask(it)) },
-                    onSelect = { onIntent(TaskListIntent.SelectTask(it)) },
+                    onSelect = { onIntent(TaskListIntent.SelectTask(taskId = it))},
                     deletingTaskId = state.deletingTaskId
                 )
             }
