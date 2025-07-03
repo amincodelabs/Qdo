@@ -24,4 +24,10 @@ interface TaskRepository {
      * @param taskId The ID of the task to delete.
      */
     suspend fun deleteTask(taskId: Long)
+
+    /**
+     * Update an existing task.
+     * @param task The task to update.
+     */
+    suspend fun updateTask(task: Task)
 } 
