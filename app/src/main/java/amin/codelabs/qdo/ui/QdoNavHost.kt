@@ -5,11 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import amin.codelabs.qdo.ui.navigation.taskListNavGraph
 import amin.codelabs.qdo.ui.navigation.addTaskNavGraph
+import amin.codelabs.qdo.ui.navigation.taskDetailsNavGraph
 
 sealed class QdoDestination(val route: String) {
-    object TaskList : QdoDestination("tasklist")
-    object AddTask : QdoDestination("addtask")
-    object TaskDetail : QdoDestination("taskdetail/{taskId}") {
+    data object TaskList : QdoDestination("tasklist")
+    data object AddTask : QdoDestination("addtask")
+    data object TaskDetail : QdoDestination("taskdetail/{taskId}") {
         fun createRoute(taskId: Long) = "taskdetail/$taskId"
     }
 }
@@ -22,5 +23,6 @@ fun QdoNavHost(navController: NavHostController) {
     ) {
         taskListNavGraph(navController)
         addTaskNavGraph(navController)
+        taskDetailsNavGraph(navController)
     }
 } 
