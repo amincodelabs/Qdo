@@ -1,5 +1,6 @@
 package amin.codelabs.qdo.feature.tasklist.ui
 
+import amin.codelabs.qdo.domain.task.Task
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,13 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import amin.codelabs.qdo.domain.task.Task
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 
 @Composable
 fun TaskList(
     tasks: List<Task>,
     onDelete: (Long) -> Unit,
-    onSelect: (Long) -> Unit
+    onSelect: (Long) -> Unit,
+    deletingTaskId: Long? = null
 ) {
     LazyColumn(
         modifier = Modifier
@@ -26,7 +32,19 @@ fun TaskList(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(tasks, key = { it.id }) { task ->
-            TaskListItem(task = task, onDelete = onDelete, onSelect = onSelect)
+            AnimatedVisibility(
+                visible = true,
+                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 })
+            ) {
+                TaskListItem(
+                    task = task,
+                    onDelete = onDelete,
+                    onSelect = onSelect,
+                    modifier = Modifier.animateEnterExit(),
+                    isDeleting = deletingTaskId == task.id
+                )
+            }
         }
     }
 }
