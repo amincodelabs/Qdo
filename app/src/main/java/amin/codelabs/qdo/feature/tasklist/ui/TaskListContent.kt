@@ -32,7 +32,8 @@ fun TaskListContent(
                 TaskList(
                     tasks = state.tasks,
                     onDelete = { onIntent(TaskListIntent.DeleteTask(it)) },
-                    onSelect = { onIntent(TaskListIntent.SelectTask(it)) }
+                    onSelect = { onIntent(TaskListIntent.SelectTask(it)) },
+                    deletingTaskId = state.deletingTaskId
                 )
             }
         }

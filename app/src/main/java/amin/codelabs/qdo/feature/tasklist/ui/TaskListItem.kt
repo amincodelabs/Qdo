@@ -17,12 +17,14 @@ import amin.codelabs.qdo.domain.task.Task
 fun TaskListItem(
     task: Task,
     onDelete: (Long) -> Unit,
-    onSelect: (Long) -> Unit
+    onSelect: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    isDeleting: Boolean = false
 ) {
     Surface(
         shape = MaterialTheme.shapes.medium,
         tonalElevation = 2.dp,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onSelect(task.id) }
     ) {
@@ -48,12 +50,19 @@ fun TaskListItem(
                     )
                 }
             }
-            IconButton(onClick = { onDelete(task.id) }) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete Task",
-                    tint = MaterialTheme.colorScheme.error
+            if (isDeleting) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    strokeWidth = 2.dp
                 )
+            } else {
+                IconButton(onClick = { onDelete(task.id) }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete Task",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
     }
