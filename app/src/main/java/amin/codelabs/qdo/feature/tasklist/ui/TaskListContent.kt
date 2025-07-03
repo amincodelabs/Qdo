@@ -23,7 +23,7 @@ fun TaskListContent(
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             state.error != null -> {
-                ErrorView(message = state.error) { onIntent(TaskListIntent.LoadTasks) }
+                ErrorView(message = state.error)
             }
             state.tasks.isEmpty() -> {
                 EmptyView()
