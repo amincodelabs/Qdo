@@ -47,7 +47,6 @@ private fun TaskListScreenEmptyPreview() {
     TaskListScreen(
         state = TaskListState(tasks = emptyList()),
         onIntent = {},
-        onSelect = {}
     )
 }
 
@@ -68,7 +67,6 @@ private fun TaskListScreenFilledPreview() {
             )
         ),
         onIntent = {},
-        onSelect = {}
     )
 }
 
@@ -78,6 +76,5 @@ private fun TaskListScreenErrorPreview() {
     TaskListScreen(
         state = TaskListState(error = "Something went wrong!"),
         onIntent = {},
-        onSelect = {}
     )
 } 
