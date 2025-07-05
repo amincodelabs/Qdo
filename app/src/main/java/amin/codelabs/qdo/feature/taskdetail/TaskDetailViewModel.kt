@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 
 @HiltViewModel
 class TaskDetailViewModel @Inject constructor(
@@ -38,7 +39,7 @@ class TaskDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadTask(taskId: Long) {
+    private fun loadTask(taskId: Long) {
         setState { copy(isLoading = true, error = null) }
         viewModelScope.launch {
             getTasks().catch {
@@ -136,6 +137,7 @@ class TaskDetailViewModel @Inject constructor(
             try {
                 deleteTask(task.id)
                 sendEffect { TaskDetailEffect.ShowSnackbar("Task deleted") }
+                delay(300) // Small delay to show snackbar before navigation
                 sendEffect { TaskDetailEffect.NavigateBack }
             } catch (e: Exception) {
                 logger.logError(e, "Failed to delete task")
