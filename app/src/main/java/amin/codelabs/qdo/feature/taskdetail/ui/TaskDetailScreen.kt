@@ -3,6 +3,7 @@ package amin.codelabs.qdo.feature.taskdetail.ui
 import amin.codelabs.qdo.domain.task.Task
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,31 +70,6 @@ fun TaskDetailScreen(
                 onDelete = { onIntent(TaskDetailIntent.Delete) }
             )
         },
-        bottomBar = {
-            if (!state.isEditing && state.task != null) {
-                Button(
-                    onClick = { onIntent(TaskDetailIntent.SetDone(!state.task.isDone)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp, 16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
-                    ),
-                    shape = MaterialTheme.shapes.medium,
-                    enabled = !state.task.isDone
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.CheckCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(if (state.task.isDone) "Completed" else "Mark as Done")
-                }
-            }
-        },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Box(modifier = modifier
@@ -114,6 +90,32 @@ fun TaskDetailScreen(
 
                 state.task != null -> {
                     TaskDetailContent(state, onIntent, Modifier.align(Alignment.TopCenter))
+                }
+            }
+            
+            // Bottom button positioned above navigation bar
+            if (!state.isEditing && state.task != null) {
+                Button(
+                    onClick = { onIntent(TaskDetailIntent.SetDone(!state.task.isDone)) },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    enabled = !state.task.isDone
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(if (state.task.isDone) "Completed" else "Mark as Done")
                 }
             }
         }
@@ -237,44 +239,50 @@ private fun TaskDetailContent(
                 )
             } else if (task != null) {
                 Spacer(Modifier.height(12.dp))
-                Text(
-                    text = task.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                
+                // Title and status label row
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.padding(bottom = 2.dp)
-                )
+                ) {
+                    Text(
+                        text = task.title,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    // Status label with background
+                    Text(
+                        text = if (task.isDone) "Done" else "Todo",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (task.isDone) Color.White else MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier
+                            .background(
+                                color = if (task.isDone) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.small
+                            )
+                            .padding(
+                                horizontal = 8.dp,
+                                vertical = 4.dp
+                            )
+                    )
+                }
+                
                 Text(
                     text = DateTimeFormatter.formatRelativeTime(task.createdAt),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
+                
                 if (!task.description.isNullOrBlank()) {
                     Text(
                         text = task.description ?: "",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.padding(bottom = 8.dp)
-                ) {
-                    Checkbox(
-                        checked = task.isDone,
-                        onCheckedChange = null,
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = MaterialTheme.colorScheme.primary,
-                            uncheckedColor = MaterialTheme.colorScheme.outline
-                        ),
-                        enabled = false
-                    )
-                    Text(
-                        if (task.isDone) "Done" else "Not done",
-                        color = if (task.isDone) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
