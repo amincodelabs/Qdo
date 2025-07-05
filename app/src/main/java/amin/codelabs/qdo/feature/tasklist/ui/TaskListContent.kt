@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.lazy.LazyListState
 
 @Composable
 fun TaskListContent(
     state: TaskListState,
     onIntent: (TaskListIntent) -> Unit,
     modifier: Modifier = Modifier,
+    listState: LazyListState
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         when {
@@ -34,9 +36,10 @@ fun TaskListContent(
             else -> {
                 TaskList(
                     tasks = state.tasks,
-                    onDelete = { onIntent(TaskListIntent.DeleteTask(it)) },
+                    onMarkAsDone = { onIntent(TaskListIntent.MarkAsDone(it)) },
                     onSelect = { onIntent(TaskListIntent.SelectTask(taskId = it))},
-                    deletingTaskId = state.deletingTaskId
+                    markingAsDoneTaskId = state.markingAsDoneTaskId,
+                    listState = listState
                 )
             }
         }
@@ -55,6 +58,7 @@ private fun TaskListContentPreview() {
             ),
             error = null
         ),
-        onIntent = {}
+        onIntent = {},
+        listState = LazyListState()
     )
 } 

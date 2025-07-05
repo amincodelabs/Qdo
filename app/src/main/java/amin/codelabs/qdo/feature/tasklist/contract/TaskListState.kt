@@ -9,11 +9,11 @@ import amin.codelabs.qdo.infrastructure.mvi.UiState
  * @property isLoading Whether tasks are being loaded.
  * @property tasks The current list of tasks.
  * @property error Optional error message.
- * @property deletingTaskId ID of the task currently being deleted
+ * @property markingAsDoneTaskId ID of the task currently being marked as done
  */
 data class TaskListState(
     val isLoading: Boolean = false,
     val tasks: List<Task> = emptyList(),
     val error: String? = null,
-    val deletingTaskId: Long? = null
+    val markingAsDoneTaskId: Long? = null
 ) : UiState 

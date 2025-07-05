@@ -11,6 +11,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 
 /**
  * Top-level screen for the Task List feature.
@@ -21,8 +23,8 @@ fun TaskListScreen(
     onIntent: (TaskListIntent) -> Unit,
     onAddTask: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    onSelect: (Long) -> Unit,
 ) {
+    val listState = rememberLazyListState()
 
     Scaffold(
         topBar = { TaskListTopBar() },
@@ -34,6 +36,7 @@ fun TaskListScreen(
             state = state,
             onIntent = onIntent,
             modifier = androidx.compose.ui.Modifier.padding(padding),
+            listState = listState
         )
     }
 }

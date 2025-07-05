@@ -16,15 +16,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.lazy.LazyListState
 
 @Composable
 fun TaskList(
     tasks: List<Task>,
-    onDelete: (Long) -> Unit,
+    onMarkAsDone: (Long) -> Unit,
     onSelect: (Long) -> Unit,
-    deletingTaskId: Long? = null
+    markingAsDoneTaskId: Long? = null,
+    listState: LazyListState
 ) {
     LazyColumn(
+        state = listState,
         modifier = Modifier
             .fillMaxSize()
             .background(androidx.compose.material3.MaterialTheme.colorScheme.background),
@@ -39,10 +42,10 @@ fun TaskList(
             ) {
                 TaskListItem(
                     task = task,
-                    onDelete = onDelete,
+                    onMarkAsDone = onMarkAsDone,
                     onSelect = onSelect,
                     modifier = Modifier.animateEnterExit(),
-                    isDeleting = deletingTaskId == task.id
+                    isMarkingAsDone = markingAsDoneTaskId == task.id
                 )
             }
         }
@@ -57,7 +60,8 @@ private fun TaskListPreview() {
             Task(id = 1, title = "Buy groceries", description = "Milk, eggs, bread"),
             Task(id = 2, title = "Read a book", description = "Atomic Habits")
         ),
-        onDelete = {},
-        onSelect = {}
+        onMarkAsDone = {},
+        onSelect = {},
+        listState = LazyListState()
     )
 } 

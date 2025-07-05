@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import amin.codelabs.qdo.infrastructure.datetime.DateTimeFormatter
 
 @Composable
 fun TaskDetailScreen(
@@ -203,7 +204,7 @@ private fun TaskDetailContent(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = formatRelativeTime(task.createdAt),
+                text = DateTimeFormatter.formatRelativeTime(task.createdAt),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -237,24 +238,6 @@ private fun TaskDetailContent(
                 )
             }
         }
-    }
-}
-
-private fun formatRelativeTime(createdAt: Long): String {
-    val now = System.currentTimeMillis()
-    val diff = now - createdAt
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
-    val hours = TimeUnit.MILLISECONDS.toHours(diff)
-    val days = TimeUnit.MILLISECONDS.toDays(diff)
-    val weeks = days / 7
-    val months = days / 30
-    return when {
-        minutes < 1 -> "just now"
-        minutes < 60 -> "$minutes minute${if (minutes == 1L) "" else "s"} ago"
-        hours < 24 -> "$hours hour${if (hours == 1L) "" else "s"} ago"
-        days < 7 -> "$days day${if (days == 1L) "" else "s"} ago"
-        weeks < 4 -> "$weeks week${if (weeks == 1L) "" else "s"} ago"
-        else -> SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(createdAt))
     }
 }
 

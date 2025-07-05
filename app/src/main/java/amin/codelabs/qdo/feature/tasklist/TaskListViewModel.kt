@@ -1,10 +1,10 @@
 package amin.codelabs.qdo.feature.tasklist
 
-import amin.codelabs.qdo.domain.task.DeleteTaskUseCase
 import amin.codelabs.qdo.domain.task.GetTasksUseCase
+import amin.codelabs.qdo.domain.task.UpdateTaskUseCase
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListEffect
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
-import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.DeleteTask
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.MarkAsDone
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.SelectTask
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 import amin.codelabs.qdo.infrastructure.logger.Logger
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
     private val getTasks: GetTasksUseCase,
-    private val deleteTask: DeleteTaskUseCase,
+    private val updateTask: UpdateTaskUseCase,
     private val logger: Logger
 ) : BaseMviViewModel<TaskListIntent, TaskListState, TaskListEffect>(TaskListState()) {
 
@@ -36,28 +36,37 @@ class TaskListViewModel @Inject constructor(
                     setState { copy(isLoading = false, error = it.message) }
                 }
                 .collectLatest { tasks ->
-                    setState { copy(isLoading = false, tasks = tasks, error = null) }
+                    setState { 
+                        copy(
+                            isLoading = false, 
+                            tasks = tasks.sortedBy { it.isDone }, 
+                            error = null
+                        ) 
+                    }
                 }
         }
     }
 
     override suspend fun handleIntent(intent: TaskListIntent) {
         when (intent) {
-            is DeleteTask -> delete(intent.taskId)
+            is MarkAsDone -> markAsDone(intent.taskId)
             is SelectTask -> sendEffect { TaskListEffect.NavigateToTask(intent.taskId) }
         }
     }
 
-    private suspend fun delete(taskId: Long) {
-        setState { copy(deletingTaskId = taskId) }
+    private suspend fun markAsDone(taskId: Long) {
+        setState { copy(markingAsDoneTaskId = taskId) }
         try {
-            deleteTask(taskId)
-            setState { copy(deletingTaskId = null) }
-            sendEffect { TaskListEffect.ShowSnackbar("Task deleted") }
+            val task = state.value.tasks.find { it.id == taskId }
+            if (task != null) {
+                updateTask(task.copy(isDone = true))
+                setState { copy(markingAsDoneTaskId = null) }
+                sendEffect { TaskListEffect.ShowSnackbar("Great job!") }
+            }
         } catch (e: Exception) {
-            logger.logError(e, "Failed to delete task")
-            setState { copy(deletingTaskId = null, error = e.message) }
-            sendEffect { TaskListEffect.ShowSnackbar("Failed to delete task") }
+            logger.logError(e, "Failed to mark task as done")
+            setState { copy(markingAsDoneTaskId = null, error = e.message) }
+            sendEffect { TaskListEffect.ShowSnackbar("Failed to mark task as done") }
         }
     }
 } 
