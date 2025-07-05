@@ -37,9 +37,6 @@ fun NavGraphBuilder.taskListNavGraph(navController: NavHostController) {
             onIntent = viewModel::processIntent,
             onAddTask = { navController.navigate(QdoDestination.AddTask.route) },
             snackbarHostState = snackbarHostState,
-            onSelect = {
-                 navController.navigate(QdoDestination.TaskDetail.createRoute(it))
-            }
         )
     }
 } 
