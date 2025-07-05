@@ -40,7 +40,8 @@ fun NavGraphBuilder.taskDetailsNavGraph(navController: NavHostController) {
 
         TaskDetailScreen(
             state = state,
-            onIntent = viewModel::processIntent
+            onIntent = viewModel::processIntent,
+            snackbarHostState = snackbarHostState
         )
     }
 }
