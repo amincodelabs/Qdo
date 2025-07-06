@@ -28,7 +28,7 @@ object TaskModule {
 
     @Provides
     @Singleton
-    fun provideTaskRepository(dao: TaskDao, logger: Logger): TaskRepository = TaskRepositoryImpl(dao, logger)
+    fun provideTaskRepository(dao: TaskDao): TaskRepository = TaskRepositoryImpl(dao)
 
     @Provides
     fun provideUpdateTaskUseCase(repository: TaskRepository): UpdateTaskUseCase = UpdateTaskUseCase(repository)
