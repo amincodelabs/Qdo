@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.tasklist.ui
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.LazyListState
 
 /**
  * Top-level screen for the Task List feature.

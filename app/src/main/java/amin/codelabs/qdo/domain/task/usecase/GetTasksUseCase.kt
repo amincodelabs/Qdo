@@ -1,5 +1,7 @@
-package amin.codelabs.qdo.domain.task
+package amin.codelabs.qdo.domain.task.usecase
 
+import amin.codelabs.qdo.domain.task.model.Task
+import amin.codelabs.qdo.domain.task.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.tasklist.ui
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 import androidx.compose.foundation.layout.Box

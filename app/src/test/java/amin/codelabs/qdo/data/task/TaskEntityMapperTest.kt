@@ -1,6 +1,8 @@
 package amin.codelabs.qdo.data.task
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.data.task.entity.TaskEntity
+import amin.codelabs.qdo.data.task.mapper.TaskEntityMapper
+import amin.codelabs.qdo.domain.task.model.Task
 import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

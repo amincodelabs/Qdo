@@ -1,7 +1,7 @@
 package amin.codelabs.qdo.feature.addtask
 
-import amin.codelabs.qdo.domain.task.AddTaskUseCase
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.usecase.AddTaskUseCase
+import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.feature.addtask.contract.AddTaskIntent
 import amin.codelabs.qdo.feature.addtask.contract.AddTaskIntent.*
 import amin.codelabs.qdo.feature.addtask.contract.AddTaskState

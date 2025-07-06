@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.tasklist.ui
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.model.Task
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

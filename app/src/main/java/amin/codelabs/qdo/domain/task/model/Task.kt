@@ -1,4 +1,4 @@
-package amin.codelabs.qdo.domain.task
+package amin.codelabs.qdo.domain.task.model
 
 /**
  * Domain model representing a user task.
