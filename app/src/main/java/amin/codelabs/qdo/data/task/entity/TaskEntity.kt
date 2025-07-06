@@ -1,4 +1,4 @@
-package amin.codelabs.qdo.data.task
+package amin.codelabs.qdo.data.task.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,7 +1,9 @@
-package amin.codelabs.qdo.data.task
+package amin.codelabs.qdo.data.task.repository
 
-import amin.codelabs.qdo.domain.task.Task
-import amin.codelabs.qdo.domain.task.TaskRepository
+import amin.codelabs.qdo.data.task.dao.TaskDao
+import amin.codelabs.qdo.data.task.mapper.TaskEntityMapper
+import amin.codelabs.qdo.domain.task.model.Task
+import amin.codelabs.qdo.domain.task.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

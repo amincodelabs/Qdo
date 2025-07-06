@@ -1,7 +1,7 @@
 package amin.codelabs.qdo.feature.tasklist
 
-import amin.codelabs.qdo.domain.task.GetTasksUseCase
-import amin.codelabs.qdo.domain.task.UpdateTaskUseCase
+import amin.codelabs.qdo.domain.task.usecase.GetTasksUseCase
+import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListEffect
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.*

@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.taskdetail.contract
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.infrastructure.mvi.UiState
 
 /**

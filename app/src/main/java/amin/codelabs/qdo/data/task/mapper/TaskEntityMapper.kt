@@ -1,6 +1,7 @@
-package amin.codelabs.qdo.data.task
+package amin.codelabs.qdo.data.task.mapper
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.data.task.entity.TaskEntity
+import amin.codelabs.qdo.domain.task.model.Task
 
 object TaskEntityMapper {
     fun fromEntity(entity: TaskEntity): Task = Task(

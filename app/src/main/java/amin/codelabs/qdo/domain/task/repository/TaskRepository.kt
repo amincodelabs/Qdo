@@ -1,5 +1,6 @@
-package amin.codelabs.qdo.domain.task
+package amin.codelabs.qdo.domain.task.repository
 
+import amin.codelabs.qdo.domain.task.model.Task
 import kotlinx.coroutines.flow.Flow
 
 /**
