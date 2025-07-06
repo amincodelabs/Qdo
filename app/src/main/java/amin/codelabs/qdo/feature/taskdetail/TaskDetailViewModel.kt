@@ -136,8 +136,6 @@ class TaskDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 deleteTask(task.id)
-                sendEffect { TaskDetailEffect.ShowSnackbar("Task deleted") }
-                delay(300) // Small delay to show snackbar before navigation
                 sendEffect { TaskDetailEffect.NavigateBack }
             } catch (e: Exception) {
                 logger.logError(e, "Failed to delete task")
