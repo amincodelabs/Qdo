@@ -9,28 +9,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
-fun NavGraphBuilder.taskListNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.taskListNavGraph(
+    navController: NavHostController,
+    viewModel: TaskListViewModel
+) {
     composable(QdoDestination.TaskList.route) {
-        val viewModel: TaskListViewModel = hiltViewModel()
         val state by viewModel.state.collectAsState()
         val effect = viewModel.effect
         val snackbarHostState = remember { SnackbarHostState() }
-
-        // Check if we're returning from task deletion
-        LaunchedEffect(Unit) {
-            val taskDeleted =
-                navController.currentBackStackEntry?.arguments?.getBoolean("taskDeleted") ?: false
-            if (taskDeleted) {
-                snackbarHostState.showSnackbar("Task deleted successfully")
-                // Clear the flag
-                navController.currentBackStackEntry?.arguments?.remove("taskDeleted")
-            }
-        }
 
         LaunchedEffect(effect) {
             effect.collect { e ->

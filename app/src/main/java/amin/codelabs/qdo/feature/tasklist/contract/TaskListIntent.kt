@@ -10,4 +10,6 @@ sealed interface TaskListIntent : UiIntent {
     data class MarkAsDone(val taskId: Long) : TaskListIntent
     /** User clicks on a task (for details, edit, etc). */
     data class SelectTask(val taskId: Long) : TaskListIntent
+    /** Inform that a task was deleted from another screen. */
+    data object TaskDeleted : TaskListIntent
 } 
