@@ -1,5 +1,13 @@
 package amin.codelabs.qdo.infrastructure.datetime
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.derivedStateOf
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,5 +42,32 @@ object DateTimeFormatter {
             weeks < 4 -> "$weeks week${if (weeks == 1L) "" else "s"} ago"
             else -> SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(timestamp))
         }
+    }
+    
+    /**
+     * Composable that automatically refreshes relative time formatting every minute.
+     * This ensures the displayed time stays current as time passes.
+     *
+     * @param timestamp The timestamp in milliseconds since epoch.
+     * @return A human-readable relative time string that updates automatically.
+     */
+    @Composable
+    fun AutoRefreshingRelativeTime(timestamp: Long): String {
+        var ticker by remember { mutableStateOf(0) }
+        
+        LaunchedEffect(timestamp) {
+            while (true) {
+                delay(60000) // Refresh every minute
+                ticker += 1
+            }
+        }
+        
+        val relativeTime by remember(ticker, timestamp) {
+            derivedStateOf {
+                formatRelativeTime(timestamp)
+            }
+        }
+        
+        return relativeTime
     }
 } 

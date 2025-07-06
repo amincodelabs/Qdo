@@ -65,7 +65,7 @@ fun TaskListItem(
                     )
                 }
                 Text(
-                    text = DateTimeFormatter.formatRelativeTime(task.createdAt),
+                    text = DateTimeFormatter.AutoRefreshingRelativeTime(task.createdAt),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 4.dp)
