@@ -21,6 +21,17 @@ fun NavGraphBuilder.taskListNavGraph(navController: NavHostController) {
         val effect = viewModel.effect
         val snackbarHostState = remember { SnackbarHostState() }
 
+        // Check if we're returning from task deletion
+        LaunchedEffect(Unit) {
+            val taskDeleted =
+                navController.currentBackStackEntry?.arguments?.getBoolean("taskDeleted") ?: false
+            if (taskDeleted) {
+                snackbarHostState.showSnackbar("Task deleted successfully")
+                // Clear the flag
+                navController.currentBackStackEntry?.arguments?.remove("taskDeleted")
+            }
+        }
+
         LaunchedEffect(effect) {
             effect.collect { e ->
                 when (e) {
