@@ -24,8 +24,8 @@ fun NavGraphBuilder.taskDetailsNavGraph(navController: NavHostController) {
         val snackbarHostState = remember { SnackbarHostState() }
 
         LaunchedEffect(taskId) {
-            if (taskId != null) {
-                viewModel.processIntent(TaskDetailIntent.LoadTask(taskId))
+            taskId?.let {
+                viewModel.processIntent(TaskDetailIntent.LoadTask(taskId = it))
             }
         }
 
@@ -33,7 +33,16 @@ fun NavGraphBuilder.taskDetailsNavGraph(navController: NavHostController) {
             effect.collect { e ->
                 when (e) {
                     is TaskDetailEffect.ShowSnackbar -> snackbarHostState.showSnackbar(e.message)
-                    is TaskDetailEffect.NavigateBack -> navController.popBackStack()
+                    is TaskDetailEffect.NavigateBack -> {
+                        if (navController.currentBackStackEntry?.destination?.route != QdoDestination.TaskList.route) {
+                            // Navigate back to task list with deletion flag
+                            navController.previousBackStackEntry?.arguments?.putBoolean(
+                                "taskDeleted",
+                                true
+                            )
+                            navController.popBackStack()
+                        }
+                    }
                 }
             }
         }
