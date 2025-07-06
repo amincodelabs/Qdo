@@ -273,7 +273,7 @@ private fun TaskDetailContent(
                 }
                 
                 Text(
-                    text = DateTimeFormatter.formatRelativeTime(task.createdAt),
+                    text = DateTimeFormatter.AutoRefreshingRelativeTime(task.createdAt),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 8.dp)
