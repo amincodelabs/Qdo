@@ -1,5 +1,7 @@
-package amin.codelabs.qdo.data.task
+package amin.codelabs.qdo.data.task.database
 
+import amin.codelabs.qdo.data.task.dao.TaskDao
+import amin.codelabs.qdo.data.task.entity.TaskEntity
 import androidx.room.Database
 import androidx.room.RoomDatabase
 

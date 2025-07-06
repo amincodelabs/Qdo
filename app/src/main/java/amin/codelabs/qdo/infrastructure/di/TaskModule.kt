@@ -2,12 +2,11 @@ package amin.codelabs.qdo.infrastructure.di
 
 import android.content.Context
 import androidx.room.Room
-import amin.codelabs.qdo.data.task.TaskDao
-import amin.codelabs.qdo.data.task.TaskDatabase
-import amin.codelabs.qdo.data.task.TaskRepositoryImpl
-import amin.codelabs.qdo.domain.task.TaskRepository
-import amin.codelabs.qdo.domain.task.UpdateTaskUseCase
-import amin.codelabs.qdo.infrastructure.logger.Logger
+import amin.codelabs.qdo.data.task.dao.TaskDao
+import amin.codelabs.qdo.data.task.database.TaskDatabase
+import amin.codelabs.qdo.data.task.repository.TaskRepositoryImpl
+import amin.codelabs.qdo.domain.task.repository.TaskRepository
+import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,9 +1,8 @@
 package amin.codelabs.qdo.feature.taskdetail
 
-import amin.codelabs.qdo.domain.task.DeleteTaskUseCase
-import amin.codelabs.qdo.domain.task.GetTasksUseCase
-import amin.codelabs.qdo.domain.task.UpdateTaskUseCase
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.usecase.DeleteTaskUseCase
+import amin.codelabs.qdo.domain.task.usecase.GetTasksUseCase
+import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.*
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailState
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 
 @HiltViewModel
 class TaskDetailViewModel @Inject constructor(

@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.taskdetail.ui
 
-import amin.codelabs.qdo.domain.task.Task
+import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailState
 import androidx.compose.foundation.background
@@ -50,10 +50,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 import amin.codelabs.qdo.infrastructure.datetime.DateTimeFormatter
 
 @Composable
