@@ -4,8 +4,7 @@ import amin.codelabs.qdo.domain.task.GetTasksUseCase
 import amin.codelabs.qdo.domain.task.UpdateTaskUseCase
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListEffect
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent
-import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.MarkAsDone
-import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.SelectTask
+import amin.codelabs.qdo.feature.tasklist.contract.TaskListIntent.*
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListState
 import amin.codelabs.qdo.infrastructure.logger.Logger
 import amin.codelabs.qdo.infrastructure.mvi.BaseMviViewModel
@@ -51,6 +50,7 @@ class TaskListViewModel @Inject constructor(
         when (intent) {
             is MarkAsDone -> markAsDone(intent.taskId)
             is SelectTask -> sendEffect { TaskListEffect.NavigateToTask(intent.taskId) }
+            is TaskDeleted -> sendEffect { TaskListEffect.ShowSnackbar("Task deleted successfully") }
         }
     }
 

@@ -15,7 +15,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
-fun NavGraphBuilder.taskDetailsNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.taskDetailsNavGraph(
+    navController: NavHostController,
+    onTaskDeleted: () -> Unit
+) {
     composable(QdoDestination.TaskDetail.route) { backStackEntry ->
         val taskId = backStackEntry.arguments?.getString("taskId")?.toLongOrNull()
         val viewModel: TaskDetailViewModel = hiltViewModel()
@@ -35,12 +38,8 @@ fun NavGraphBuilder.taskDetailsNavGraph(navController: NavHostController) {
                     is TaskDetailEffect.ShowSnackbar -> snackbarHostState.showSnackbar(e.message)
                     is TaskDetailEffect.NavigateBack -> {
                         if (navController.currentBackStackEntry?.destination?.route != QdoDestination.TaskList.route) {
-                            // Navigate back to task list with deletion flag
-                            navController.previousBackStackEntry?.arguments?.putBoolean(
-                                "taskDeleted",
-                                true
-                            )
                             navController.popBackStack()
+                            onTaskDeleted()
                         }
                     }
                 }
