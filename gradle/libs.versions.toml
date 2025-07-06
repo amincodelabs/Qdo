@@ -11,6 +11,8 @@ composeBom = "2025.06.01"
 # Kotlin Coroutines
 coroutines = "1.10.2"
 # Room
+mockitoCore = "5.8.0"
+mockitoKotlin = "5.2.1"
 room = "2.7.2"
 # Hilt
 hilt = "2.52"
@@ -49,6 +51,8 @@ androidx-room-testing = { group = "androidx.room", name = "room-testing", versio
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
