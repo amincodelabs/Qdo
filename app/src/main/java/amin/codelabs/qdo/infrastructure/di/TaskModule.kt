@@ -7,6 +7,7 @@ import amin.codelabs.qdo.data.task.database.TaskDatabase
 import amin.codelabs.qdo.data.task.repository.TaskRepositoryImpl
 import amin.codelabs.qdo.domain.task.repository.TaskRepository
 import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
+import amin.codelabs.qdo.infrastructure.logger.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +28,7 @@ object TaskModule {
 
     @Provides
     @Singleton
-    fun provideTaskRepository(dao: TaskDao): TaskRepository = TaskRepositoryImpl(dao)
+    fun provideTaskRepository(dao: TaskDao, logger: Logger): TaskRepository = TaskRepositoryImpl(dao, logger)
 
     @Provides
     fun provideUpdateTaskUseCase(repository: TaskRepository): UpdateTaskUseCase = UpdateTaskUseCase(repository)
