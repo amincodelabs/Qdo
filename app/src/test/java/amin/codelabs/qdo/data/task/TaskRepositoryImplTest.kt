@@ -4,6 +4,7 @@ import amin.codelabs.qdo.data.task.dao.TaskDao
 import amin.codelabs.qdo.data.task.entity.TaskEntity
 import amin.codelabs.qdo.data.task.repository.TaskRepositoryImpl
 import amin.codelabs.qdo.domain.task.model.Task
+import amin.codelabs.qdo.infrastructure.logger.Logger
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -17,12 +18,14 @@ import org.junit.Assert.assertTrue
 class TaskRepositoryImplTest {
 
     private lateinit var mockDao: TaskDao
+    private lateinit var mockLogger: Logger
     private lateinit var repository: TaskRepositoryImpl
 
     @Before
     fun setUp() {
         mockDao = mock()
-        repository = TaskRepositoryImpl(mockDao)
+        mockLogger = mock()
+        repository = TaskRepositoryImpl(mockDao, mockLogger)
     }
 
     @Test

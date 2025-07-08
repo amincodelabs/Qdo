@@ -26,7 +26,7 @@ object TaskRepositoryErrorHandler {
             is SQLiteDatabaseCorruptException,
             is SQLiteAccessPermException,
             is IOException,
-            is TimeoutException -> TaskDatabaseException(e.message ?: "Database error", e)
+            is TimeoutException -> TaskDatabaseException("Database error", e)
             is IllegalArgumentException -> TaskValidationException(e.message ?: "Invalid argument", e)
             is TaskNotFoundException -> e
             else -> TaskUnknownException(e.message ?: "Unknown error", e)
