@@ -12,6 +12,7 @@ composeBom = "2025.06.01"
 coroutines = "1.10.2"
 # Room
 mockitoCore = "5.8.0"
+mockitoInline = "4.11.0"
 mockitoKotlin = "5.2.1"
 room = "2.7.2"
 # Hilt
@@ -19,6 +20,7 @@ hilt = "2.52"
 hiltNavigationCompose = "1.2.0"
 # KSP
 ksp = "2.0.21-1.0.27"
+turbine = "0.12.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,7 +54,9 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
