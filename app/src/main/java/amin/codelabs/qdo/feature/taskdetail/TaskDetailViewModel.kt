@@ -1,5 +1,8 @@
 package amin.codelabs.qdo.feature.taskdetail
 
+import amin.codelabs.qdo.domain.task.TaskDatabaseException
+import amin.codelabs.qdo.domain.task.TaskRepositoryException
+import amin.codelabs.qdo.domain.task.TaskValidationException
 import amin.codelabs.qdo.domain.task.usecase.DeleteTaskUseCase
 import amin.codelabs.qdo.domain.task.usecase.GetTasksUseCase
 import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
@@ -130,14 +133,31 @@ class TaskDetailViewModel @Inject constructor(
 
     private fun deleteCurrentTask() {
         val task = state.value.task ?: return
-        setState { copy(isLoading = true) }
+        
+        setState { copy(isLoading = true, error = null) }
+        
         viewModelScope.launch {
             try {
                 deleteTask(task.id)
                 sendEffect { TaskDetailEffect.NavigateBack }
+            } catch (e: TaskValidationException) {
+                logger.logDebug("Task deletion validation failed: ${e.message}")
+                setState { 
+                    copy(
+                        isLoading = false, 
+                        error = e.message ?: "Task not found"
+                    ) 
+                }
+                sendEffect { TaskDetailEffect.ShowSnackbar("Task not found") }
+                
+            } catch (e: TaskRepositoryException) {
+                logger.logError(e, "Repository error while deleting task")
+                setState { copy(isLoading = false, error = "Failed to delete task. Please try again.") }
+                sendEffect { TaskDetailEffect.ShowSnackbar("Failed to delete task") }
+                
             } catch (e: Exception) {
-                logger.logError(e, "Failed to delete task")
-                setState { copy(isLoading = false, error = e.message) }
+                logger.logError(e, "Unexpected error while deleting task")
+                setState { copy(isLoading = false, error = "An unexpected error occurred. Please try again.") }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Failed to delete task") }
             }
         }
