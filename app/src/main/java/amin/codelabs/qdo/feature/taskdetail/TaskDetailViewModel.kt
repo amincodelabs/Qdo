@@ -1,5 +1,6 @@
 package amin.codelabs.qdo.feature.taskdetail
 
+import amin.codelabs.qdo.domain.task.TaskDatabaseException
 import amin.codelabs.qdo.domain.task.TaskRepositoryException
 import amin.codelabs.qdo.domain.task.TaskValidationException
 import amin.codelabs.qdo.domain.task.usecase.DeleteTaskUseCase
@@ -105,9 +106,19 @@ class TaskDetailViewModel @Inject constructor(
                 updateTask(task.copy(isDone = isDone))
                 setState { copy(task = task.copy(isDone = isDone)) }
                 sendEffect { TaskDetailEffect.ShowSnackbar(if (isDone) "Marked as done" else "Marked as not done") }
+            } catch (e: TaskValidationException) {
+                logger.logDebug("Task update validation failed: ${e.message}")
+                setState { 
+                    copy(error = e.message ?: "Invalid task data")
+                }
+                sendEffect { TaskDetailEffect.ShowSnackbar("Invalid task data") }
+            }  catch (e: TaskRepositoryException) {
+                logger.logError(e, "Failed to update task done state - repository error")
+                setState { copy(error = "Failed to update task. Please try again.") }
+                sendEffect { TaskDetailEffect.ShowSnackbar("Failed to update task") }
             } catch (e: Exception) {
-                logger.logError(e, "Failed to update task done state")
-                setState { copy(error = e.message) }
+                logger.logError(e, "Failed to update task done state - unexpected error")
+                setState { copy(error = "An unexpected error occurred. Please try again.") }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Failed to update task") }
             }
         }
@@ -118,11 +129,17 @@ class TaskDetailViewModel @Inject constructor(
         val task = currentState.task ?: return
         val newTitle = currentState.editTitle.trim()
         val newDescription = currentState.editDescription.trim()
+        
+        // Clear previous errors
+        setState { copy(error = null) }
+        
+        // Basic UI validation
         if (newTitle.isBlank()) {
             setState { copy(error = "Title cannot be empty") }
             return
         }
-        setState { copy(isSaving = true, error = null) }
+        
+        setState { copy(isSaving = true) }
         viewModelScope.launch {
             try {
                 updateTask(task.copy(title = newTitle, description = newDescription))
@@ -134,9 +151,22 @@ class TaskDetailViewModel @Inject constructor(
                     )
                 }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Task updated") }
+            } catch (e: TaskValidationException) {
+                logger.logDebug("Task update validation failed: ${e.message}")
+                setState { 
+                    copy(
+                        isSaving = false, 
+                        error = e.message ?: "Invalid task data"
+                    ) 
+                }
+                sendEffect { TaskDetailEffect.ShowSnackbar("Invalid task data") }
+            } catch (e: TaskRepositoryException) {
+                logger.logError(e, "Failed to update task - repository error")
+                setState { copy(isSaving = false, error = "Failed to update task. Please try again.") }
+                sendEffect { TaskDetailEffect.ShowSnackbar("Failed to update task") }
             } catch (e: Exception) {
-                logger.logError(e, "Failed to update task")
-                setState { copy(isSaving = false, error = e.message) }
+                logger.logError(e, "Failed to update task - unexpected error")
+                setState { copy(isSaving = false, error = "An unexpected error occurred. Please try again.") }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Failed to update task") }
             }
         }
@@ -183,4 +213,4 @@ class TaskDetailViewModel @Inject constructor(
             }
         }
     }
-} 
+}
