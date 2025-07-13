@@ -9,8 +9,11 @@ import javax.inject.Inject
 /**
  * Use case for adding a new task.
  * @param repository The repository to add the task to.
+ * @param validator The validator to validate task data.
  */
-class AddTaskUseCase @Inject constructor(private val repository: TaskRepository) {
+class AddTaskUseCase @Inject constructor(
+    private val repository: TaskRepository
+) {
     /**
      * Add a new task with domain validation.
      * @param task The task to add.
@@ -19,7 +22,7 @@ class AddTaskUseCase @Inject constructor(private val repository: TaskRepository)
     suspend operator fun invoke(task: Task) {
         // Validate task before adding
         TaskValidator.validateForCreation(task)
-        
+
         // Add task to repository
         repository.addTask(task)
     }

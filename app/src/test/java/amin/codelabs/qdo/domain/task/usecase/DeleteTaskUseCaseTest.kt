@@ -2,6 +2,7 @@ package amin.codelabs.qdo.domain.task.usecase
 
 import amin.codelabs.qdo.domain.task.TaskValidationException
 import amin.codelabs.qdo.domain.task.repository.TaskRepository
+import amin.codelabs.qdo.domain.task.validation.TaskValidator
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
