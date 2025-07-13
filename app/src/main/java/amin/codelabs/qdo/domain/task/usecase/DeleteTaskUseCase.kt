@@ -8,8 +8,11 @@ import javax.inject.Inject
 /**
  * Use case for deleting a task by its ID.
  * @param repository The repository to delete the task from.
+ * @param validator The validator to validate task ID.
  */
-class DeleteTaskUseCase @Inject constructor(private val repository: TaskRepository) {
+class DeleteTaskUseCase @Inject constructor(
+    private val repository: TaskRepository,
+) {
     /**
      * Delete a task by its ID with domain validation.
      * @param taskId The ID of the task to delete.
@@ -18,7 +21,7 @@ class DeleteTaskUseCase @Inject constructor(private val repository: TaskReposito
     suspend operator fun invoke(taskId: Long) {
         // Validate task ID before deletion
         TaskValidator.validateForDeletion(taskId)
-        
+
         // Delete task from repository
         repository.deleteTask(taskId)
     }
