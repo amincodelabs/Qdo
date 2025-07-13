@@ -1,5 +1,8 @@
 package amin.codelabs.qdo.feature.addtask
 
+import amin.codelabs.qdo.domain.task.TaskDatabaseException
+import amin.codelabs.qdo.domain.task.TaskRepositoryException
+import amin.codelabs.qdo.domain.task.TaskValidationException
 import amin.codelabs.qdo.domain.task.usecase.AddTaskUseCase
 import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.feature.addtask.contract.AddTaskIntent
@@ -32,19 +35,49 @@ class AddTaskViewModel @Inject constructor(
 
     private suspend fun saveTask() {
         val currentState = state.value
+        
+        // Clear previous errors
+        setState { copy(error = null) }
+        
+        // Basic UI validation
         if (currentState.title.isBlank()) {
             setState { copy(error = "Title cannot be empty") }
             return
         }
-        setState { copy(isSaving = true, error = null) }
+        
+        setState { copy(isSaving = true) }
+        
         try {
-            addTask(Task(title = currentState.title, description = currentState.description))
-            sendEffect { AddTaskEffect.ShowSnackbar("Task added") }
-            delay(1000)
+            // Create task with trimmed values
+            val task = Task(
+                title = currentState.title.trim(),
+                description = currentState.description?.trim()?.takeIf { it.isNotBlank() }
+            )
+            
+            addTask(task)
+            
+            // Success - show message and navigate back
+            sendEffect { AddTaskEffect.ShowSnackbar("Task added successfully") }
+            delay(1000) // Give user time to see success message
             sendEffect { AddTaskEffect.NavigateBack }
+            
+        } catch (e: TaskValidationException) {
+            logger.logDebug("Task validation failed: ${e.message}")
+            setState { 
+                copy(
+                    isSaving = false, 
+                    error = e.message ?: "Invalid task data"
+                ) 
+            }
+        } catch (e: TaskRepositoryException) {
+            logger.logError(e, "Repository error while adding task")
+            setState { copy(isSaving = false, error = "Failed to save task. Please try again.") }
+            sendEffect { AddTaskEffect.ShowSnackbar("Failed to add task") }
+            
         } catch (e: Exception) {
-            logger.logError(e, "Failed to add task")
-            setState { copy(isSaving = false, error = e.message) }
+            // Unexpected errors - log and show generic message
+            logger.logError(e, "Unexpected error while adding task")
+            setState { copy(isSaving = false, error = "An unexpected error occurred. Please try again.") }
             sendEffect { AddTaskEffect.ShowSnackbar("Failed to add task") }
         }
     }

@@ -1,5 +1,7 @@
 package amin.codelabs.qdo.feature.tasklist
 
+import amin.codelabs.qdo.domain.task.TaskDatabaseException
+import amin.codelabs.qdo.domain.task.TaskRepositoryException
 import amin.codelabs.qdo.domain.task.usecase.GetTasksUseCase
 import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
 import amin.codelabs.qdo.feature.tasklist.contract.TaskListEffect
@@ -27,12 +29,36 @@ class TaskListViewModel @Inject constructor(
 ) : BaseMviViewModel<TaskListIntent, TaskListState, TaskListEffect>(TaskListState()) {
 
     init {
+        loadTasks()
+    }
+
+    private fun loadTasks() {
         viewModelScope.launch {
             setState { copy(isLoading = true, error = null) }
             getTasks()
-                .catch {
-                    logger.logError(it, "Failed to load tasks")
-                    setState { copy(isLoading = false, error = it.message) }
+                .catch { exception ->
+                    logger.logError(exception, "Failed to load tasks")
+                    
+                    when (exception) {
+                        is TaskRepositoryException -> {
+                            setState { 
+                                copy(
+                                    isLoading = false,
+                                    error = "Failed to load tasks. Please try again."
+                                ) 
+                            }
+                            sendEffect { TaskListEffect.ShowSnackbar("Failed to load tasks") }
+                        }
+                        else -> {
+                            setState { 
+                                copy(
+                                    isLoading = false,
+                                    error = "An unexpected error occurred. Please try again."
+                                ) 
+                            }
+                            sendEffect { TaskListEffect.ShowSnackbar("Failed to load tasks") }
+                        }
+                    }
                 }
                 .collectLatest { tasks ->
                     setState { 
@@ -63,10 +89,24 @@ class TaskListViewModel @Inject constructor(
                 setState { copy(markingAsDoneTaskId = null) }
                 sendEffect { TaskListEffect.ShowSnackbar("Great job!") }
             }
+        } catch (e: TaskRepositoryException) {
+            logger.logError(e, "Failed to mark task as done - repository error")
+            setState { 
+                copy(
+                    markingAsDoneTaskId = null, 
+                    error = "Failed to update task. Please try again."
+                ) 
+            }
+            sendEffect { TaskListEffect.ShowSnackbar("Failed to update task") }
         } catch (e: Exception) {
-            logger.logError(e, "Failed to mark task as done")
-            setState { copy(markingAsDoneTaskId = null, error = e.message) }
-            sendEffect { TaskListEffect.ShowSnackbar("Failed to mark task as done") }
+            logger.logError(e, "Failed to mark task as done - unexpected error")
+            setState { 
+                copy(
+                    markingAsDoneTaskId = null, 
+                    error = "An unexpected error occurred. Please try again."
+                ) 
+            }
+            sendEffect { TaskListEffect.ShowSnackbar("Failed to update task") }
         }
     }
 } 
