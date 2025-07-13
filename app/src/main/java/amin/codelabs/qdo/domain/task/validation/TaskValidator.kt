@@ -35,6 +35,28 @@ object TaskValidator {
         validateDescription(task.description)
     }
     
+    /**
+     * Validates a task ID before deletion.
+     * @param taskId The task ID to validate
+     * @throws TaskValidationException if validation fails
+     */
+    fun validateForDeletion(taskId: Long) {
+        if (taskId <= 0) {
+            throw TaskValidationException("Task ID must be greater than 0")
+        }
+    }
+    
+    /**
+     * Validates a task ID for retrieval operations.
+     * @param taskId The task ID to validate
+     * @throws TaskValidationException if validation fails
+     */
+    fun validateForRetrieval(taskId: Long) {
+        if (taskId <= 0) {
+            throw TaskValidationException("Task ID must be greater than 0")
+        }
+    }
+    
     private fun validateTitle(title: String) {
         when {
             title.isBlank() -> throw TaskValidationException("Task title cannot be empty")

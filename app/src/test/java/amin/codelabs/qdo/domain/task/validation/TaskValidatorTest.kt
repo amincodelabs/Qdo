@@ -119,4 +119,98 @@ class TaskValidatorTest {
         }
         assertEquals("Task ID must be greater than 0", exception.message)
     }
+
+    // Deletion validation tests
+    @Test
+    fun `validateForDeletion accepts positive task ID`() {
+        val taskId = 1L
+        
+        // Should not throw any exception
+        TaskValidator.validateForDeletion(taskId)
+    }
+
+    @Test
+    fun `validateForDeletion accepts maximum positive task ID`() {
+        val taskId = Long.MAX_VALUE
+        
+        // Should not throw any exception
+        TaskValidator.validateForDeletion(taskId)
+    }
+
+    @Test
+    fun `validateForDeletion rejects zero task ID`() {
+        val taskId = 0L
+        
+        val exception = assertThrows(TaskValidationException::class.java) {
+            TaskValidator.validateForDeletion(taskId)
+        }
+        assertEquals("Task ID must be greater than 0", exception.message)
+    }
+
+    @Test
+    fun `validateForDeletion rejects negative task ID`() {
+        val taskId = -1L
+        
+        val exception = assertThrows(TaskValidationException::class.java) {
+            TaskValidator.validateForDeletion(taskId)
+        }
+        assertEquals("Task ID must be greater than 0", exception.message)
+    }
+
+    @Test
+    fun `validateForDeletion rejects minimum negative task ID`() {
+        val taskId = Long.MIN_VALUE
+        
+        val exception = assertThrows(TaskValidationException::class.java) {
+            TaskValidator.validateForDeletion(taskId)
+        }
+        assertEquals("Task ID must be greater than 0", exception.message)
+    }
+
+    // Retrieval validation tests
+    @Test
+    fun `validateForRetrieval accepts positive task ID`() {
+        val taskId = 1L
+        
+        // Should not throw any exception
+        TaskValidator.validateForRetrieval(taskId)
+    }
+
+    @Test
+    fun `validateForRetrieval accepts maximum positive task ID`() {
+        val taskId = Long.MAX_VALUE
+        
+        // Should not throw any exception
+        TaskValidator.validateForRetrieval(taskId)
+    }
+
+    @Test
+    fun `validateForRetrieval rejects zero task ID`() {
+        val taskId = 0L
+        
+        val exception = assertThrows(TaskValidationException::class.java) {
+            TaskValidator.validateForRetrieval(taskId)
+        }
+        assertEquals("Task ID must be greater than 0", exception.message)
+    }
+
+    @Test
+    fun `validateForRetrieval rejects negative task ID`() {
+        val taskId = -1L
+        
+        val exception = assertThrows(TaskValidationException::class.java) {
+            TaskValidator.validateForRetrieval(taskId)
+        }
+        assertEquals("Task ID must be greater than 0", exception.message)
+    }
+
+    @Test
+    fun `validateForRetrieval rejects minimum negative task ID`() {
+        val taskId = Long.MIN_VALUE
+        
+        val exception = assertThrows(TaskValidationException::class.java) {
+            TaskValidator.validateForRetrieval(taskId)
+        }
+        assertEquals("Task ID must be greater than 0", exception.message)
+    }
 } 
