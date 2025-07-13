@@ -9,8 +9,11 @@ import javax.inject.Inject
 /**
  * Use case for updating an existing task.
  * @param repository The repository to update the task in.
+ * @param validator The validator to validate task data.
  */
-class UpdateTaskUseCase @Inject constructor(private val repository: TaskRepository) {
+class UpdateTaskUseCase @Inject constructor(
+    private val repository: TaskRepository
+) {
     /**
      * Update an existing task with domain validation.
      * @param task The task to update.
@@ -19,7 +22,7 @@ class UpdateTaskUseCase @Inject constructor(private val repository: TaskReposito
     suspend operator fun invoke(task: Task) {
         // Validate task before updating
         TaskValidator.validateForUpdate(task)
-        
+
         // Update task in repository
         repository.updateTask(task)
     }
