@@ -1,7 +1,9 @@
 package amin.codelabs.qdo.domain.task.usecase
 
+import amin.codelabs.qdo.domain.task.TaskValidationException
 import amin.codelabs.qdo.domain.task.model.Task
 import amin.codelabs.qdo.domain.task.repository.TaskRepository
+import amin.codelabs.qdo.domain.task.validation.TaskValidator
 import javax.inject.Inject
 
 /**
@@ -10,8 +12,15 @@ import javax.inject.Inject
  */
 class AddTaskUseCase @Inject constructor(private val repository: TaskRepository) {
     /**
-     * Add a new task.
+     * Add a new task with domain validation.
      * @param task The task to add.
+     * @throws TaskValidationException if the task data is invalid
      */
-    suspend operator fun invoke(task: Task) = repository.addTask(task)
+    suspend operator fun invoke(task: Task) {
+        // Validate task before adding
+        TaskValidator.validateForCreation(task)
+        
+        // Add task to repository
+        repository.addTask(task)
+    }
 } 
