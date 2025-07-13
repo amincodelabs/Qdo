@@ -1,23 +1,29 @@
 package amin.codelabs.qdo.feature.taskdetail
 
-import amin.codelabs.qdo.domain.task.TaskDatabaseException
 import amin.codelabs.qdo.domain.task.TaskRepositoryException
 import amin.codelabs.qdo.domain.task.TaskValidationException
 import amin.codelabs.qdo.domain.task.usecase.DeleteTaskUseCase
 import amin.codelabs.qdo.domain.task.usecase.GetTasksUseCase
 import amin.codelabs.qdo.domain.task.usecase.UpdateTaskUseCase
-import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent
-import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.*
-import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailState
 import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailEffect
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.CancelEdit
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.ChangeDescription
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.ChangeTitle
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.Delete
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.Edit
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.LoadTask
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.Save
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailIntent.SetDone
+import amin.codelabs.qdo.feature.taskdetail.contract.TaskDetailState
 import amin.codelabs.qdo.infrastructure.logger.Logger
 import amin.codelabs.qdo.infrastructure.mvi.BaseMviViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 
 @HiltViewModel
 class TaskDetailViewModel @Inject constructor(
@@ -43,9 +49,14 @@ class TaskDetailViewModel @Inject constructor(
     private fun loadTask(taskId: Long) {
         setState { copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            getTasks().catch {
-                logger.logError(it, "Failed to load task")
-                setState { copy(isLoading = false, error = it.message) }
+            getTasks().catch { exception ->
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = "Failed to load tasks. Please try again."
+                    )
+                }
+                logger.logError(exception, "Failed to load tasks")
             }.collectLatest { tasks ->
                 val task = tasks.find { it.id == taskId }
                 if (task != null) {
@@ -133,31 +144,41 @@ class TaskDetailViewModel @Inject constructor(
 
     private fun deleteCurrentTask() {
         val task = state.value.task ?: return
-        
+
         setState { copy(isLoading = true, error = null) }
-        
+
         viewModelScope.launch {
             try {
                 deleteTask(task.id)
                 sendEffect { TaskDetailEffect.NavigateBack }
             } catch (e: TaskValidationException) {
                 logger.logDebug("Task deletion validation failed: ${e.message}")
-                setState { 
+                setState {
                     copy(
-                        isLoading = false, 
+                        isLoading = false,
                         error = e.message ?: "Task not found"
-                    ) 
+                    )
                 }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Task not found") }
-                
+
             } catch (e: TaskRepositoryException) {
                 logger.logError(e, "Repository error while deleting task")
-                setState { copy(isLoading = false, error = "Failed to delete task. Please try again.") }
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = "Failed to delete task. Please try again."
+                    )
+                }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Failed to delete task") }
-                
+
             } catch (e: Exception) {
                 logger.logError(e, "Unexpected error while deleting task")
-                setState { copy(isLoading = false, error = "An unexpected error occurred. Please try again.") }
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = "An unexpected error occurred. Please try again."
+                    )
+                }
                 sendEffect { TaskDetailEffect.ShowSnackbar("Failed to delete task") }
             }
         }
