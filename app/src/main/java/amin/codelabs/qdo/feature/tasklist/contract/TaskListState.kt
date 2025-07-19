@@ -1,7 +1,7 @@
 package amin.codelabs.qdo.feature.tasklist.contract
 
+import amin.codelabs.mvix.core.state.UiState
 import amin.codelabs.qdo.domain.task.model.Task
-import amin.codelabs.qdo.infrastructure.mvi.UiState
 
 /**
  * UI state for the Task List feature.
@@ -16,4 +16,4 @@ data class TaskListState(
     val tasks: List<Task> = emptyList(),
     val error: String? = null,
     val markingAsDoneTaskId: Long? = null
-) : UiState 
+) : UiState

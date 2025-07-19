@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.addtask.contract
 
-import amin.codelabs.qdo.infrastructure.mvi.UiState
+import amin.codelabs.mvix.core.state.UiState
 
 /**
  * UI state for the Add Task feature.
@@ -15,4 +15,4 @@ data class AddTaskState(
     val description: String = "",
     val isSaving: Boolean = false,
     val error: String? = null
-) : UiState 
+) : UiState
