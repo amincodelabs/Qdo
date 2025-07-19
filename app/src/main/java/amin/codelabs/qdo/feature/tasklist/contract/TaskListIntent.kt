@@ -1,6 +1,6 @@
 package amin.codelabs.qdo.feature.tasklist.contract
 
-import amin.codelabs.qdo.infrastructure.mvi.UiIntent
+import amin.codelabs.mvix.core.intent.UiIntent
 
 /**
  * User intents (actions) for the Task List feature.
@@ -8,8 +8,10 @@ import amin.codelabs.qdo.infrastructure.mvi.UiIntent
 sealed interface TaskListIntent : UiIntent {
     /** User requests to mark a task as done. */
     data class MarkAsDone(val taskId: Long) : TaskListIntent
+
     /** User clicks on a task (for details, edit, etc). */
     data class SelectTask(val taskId: Long) : TaskListIntent
+
     /** Inform that a task was deleted from another screen. */
     data object TaskDeleted : TaskListIntent
 } 

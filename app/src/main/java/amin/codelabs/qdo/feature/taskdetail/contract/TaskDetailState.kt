@@ -1,7 +1,7 @@
 package amin.codelabs.qdo.feature.taskdetail.contract
 
+import amin.codelabs.mvix.core.state.UiState
 import amin.codelabs.qdo.domain.task.model.Task
-import amin.codelabs.qdo.infrastructure.mvi.UiState
 
 /**
  * UI state for the Task Detail feature.
@@ -22,4 +22,4 @@ data class TaskDetailState(
     val error: String? = null,
     val editTitle: String = "",
     val editDescription: String = ""
-) : UiState 
+) : UiState
