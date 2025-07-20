@@ -55,6 +55,9 @@ dependencies {
     // MVI Core library
     implementation(libs.mvix)
 
+    // Launch Pipeline library
+    implementation(libs.launchpipeline)
+
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

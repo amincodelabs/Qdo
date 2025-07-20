@@ -15,6 +15,7 @@ mockitoCore = "5.8.0"
 mockitoInline = "4.11.0"
 mockitoKotlin = "5.2.1"
 mvix = "0.1.0"
+launchpipeline = "1.0.0"
 room = "2.7.2"
 # Hilt
 hilt = "2.52"
@@ -58,6 +59,7 @@ mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 mvix = { module = "com.github.amincodelabs:mvix", version.ref = "mvix" }
+launchpipeline = { module = "com.github.amincodelabs:launch-pipeline-Kotlin", version.ref = "launchpipeline" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
