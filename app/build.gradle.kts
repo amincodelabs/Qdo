@@ -51,9 +51,13 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation (libs.androidx.core.splashscreen)
 
     // MVI Core library
     implementation(libs.mvix)
+
+    // Launch Pipeline library
+    implementation(libs.launchpipeline)
 
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.core)
